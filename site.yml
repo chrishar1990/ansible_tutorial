@@ -1,0 +1,33 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks: 
+  - name: install apache2  and php packages for Ubuntu
+    tags: always
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: web_servers
+  become: false
+  tasks:
+    - name: Create a test file
+      tags: createFile
+      file:
+        path: /tmp/ansible_test3.txt
+        state: touch
+
+- hosts: web_serverAlone
+  become: false
+  tasks:
+    - name: Create another file
+      tags: createDBFile
+      file: 
+        path: /tmp/ansible_testDB.txt
+        state: touch
